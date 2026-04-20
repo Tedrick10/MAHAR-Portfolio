@@ -5,7 +5,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     unzip \
+    pkg-config \
+    zlib1g-dev \
     libzip-dev \
+    libonig-dev \
     libsqlite3-dev \
     && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring zip bcmath \
     && rm -rf /var/lib/apt/lists/*
