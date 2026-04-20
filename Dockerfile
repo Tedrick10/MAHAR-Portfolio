@@ -45,4 +45,5 @@ RUN mkdir -p storage/framework/cache storage/framework/sessions storage/framewor
 EXPOSE 10000
 
 # Render injects PORT env var
-CMD ["sh", "-c", "php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
+# Ensure SQLite file exists and run migrations before serving.
+CMD ["sh", "-c", "mkdir -p database && touch database/database.sqlite && php artisan migrate --force --no-interaction && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}"]
