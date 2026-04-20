@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+/* Filament ships a prebuilt theme; utilities from app blades are not included unless scanned here. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@source '../views/livewire/admin-topbar-extras.blade.php';
+@source '../views/filament/widgets/content-shortcuts-widget.blade.php';
+
+/* Default lockup: gradient letter + title (matches public header when no logo file) */
+.fi-site-brand-lockup {
+    display: inline-flex;
+    min-width: 0;
+    max-width: 100%;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.fi-site-default-logo-mark {
+    display: inline-flex;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0.5rem;
+    background: linear-gradient(to bottom right, #f97316, #dc2626);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+}
+
+.fi-site-brand-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.025em;
+    color: rgb(9 9 11);
+}
+
+.dark .fi-site-brand-title {
+    color: rgb(255 255 255);
+}
