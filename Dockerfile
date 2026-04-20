@@ -1,24 +1,20 @@
 FROM php:8.3-cli
 
-# System packages required for Laravel + common extensions
-RUN apt-get update && apt-get install -y \
+# System packages required for Laravel build/runtime
+RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     curl \
     unzip \
     libzip-dev \
-    libpng-dev \
-    libjpeg62-turbo-dev \
-    libfreetype6-dev \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install pdo pdo_mysql mbstring zip bcmath gd \
+    libsqlite3-dev \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring zip bcmath \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Install Node.js (for Vite asset build)
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get update && apt-get install -y nodejs \
+# Install Node.js + npm (for Vite asset build)
+RUN apt-get update && apt-get install -y --no-install-recommends nodejs npm \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
