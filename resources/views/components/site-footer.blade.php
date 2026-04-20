@@ -178,10 +178,7 @@
                 {{ $settings->localized('footer_copyright') ?: $settings->displayName() }}.
                 <span class="text-zinc-500 dark:text-zinc-600">{{ __('site.footer_rights') }}</span>
             </p>
-            <a
-                href="{{ url('/admin') }}"
-                class="shrink-0 text-zinc-500 transition hover:text-orange-600 dark:text-zinc-600 dark:hover:text-orange-400"
-            >{{ __('site.admin_hint') }}</a>
+            <p class="shrink-0 text-zinc-500 dark:text-zinc-600">Power By WhiteTechnology</p>
         </div>
     </div>
 </footer>
