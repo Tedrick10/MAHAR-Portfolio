@@ -9,8 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zlib1g-dev \
     libzip-dev \
     libonig-dev \
+    libicu-dev \
     libsqlite3-dev \
-    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring zip bcmath \
+    && docker-php-ext-install pdo pdo_mysql pdo_sqlite mbstring zip bcmath intl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Composer
