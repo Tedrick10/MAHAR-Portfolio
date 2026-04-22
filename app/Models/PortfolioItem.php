@@ -3,30 +3,30 @@
 namespace App\Models;
 
 use App\Models\Concerns\HasLocalizedColumns;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
 
-#[Fillable([
-    'slug',
-    'title_en',
-    'title_my',
-    'summary_en',
-    'summary_my',
-    'image_path',
-    'gallery_paths',
-    'category_en',
-    'category_my',
-    'accent_color',
-    'sort_order',
-    'is_published',
-])]
 class PortfolioItem extends Model
 {
     use Concerns\ResolvesPublicMediaUrl;
     use HasFactory;
     use HasLocalizedColumns;
+
+    protected $fillable = [
+        'slug',
+        'title_en',
+        'title_my',
+        'summary_en',
+        'summary_my',
+        'image_path',
+        'gallery_paths',
+        'category_en',
+        'category_my',
+        'accent_color',
+        'sort_order',
+        'is_published',
+    ];
 
     protected function casts(): array
     {

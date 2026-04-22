@@ -4,26 +4,26 @@ namespace App\Models;
 
 use App\Models\Concerns\HasLocalizedColumns;
 use App\Models\Concerns\ResolvesPublicMediaUrl;
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable([
-    'title_en',
-    'title_my',
-    'body_en',
-    'body_my',
-    'icon',
-    'icon_external_url',
-    'icon_image_path',
-    'sort_order',
-    'is_published',
-])]
 class WhyChoosePoint extends Model
 {
     use HasFactory;
     use HasLocalizedColumns;
     use ResolvesPublicMediaUrl;
+
+    protected $fillable = [
+        'title_en',
+        'title_my',
+        'body_en',
+        'body_my',
+        'icon',
+        'icon_external_url',
+        'icon_image_path',
+        'sort_order',
+        'is_published',
+    ];
 
     protected function casts(): array
     {

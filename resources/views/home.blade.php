@@ -75,7 +75,7 @@
                     class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-zinc-100 shadow-2xl shadow-zinc-900/10 ring-1 ring-zinc-200/80 dark:bg-zinc-800 dark:shadow-black/40 dark:ring-zinc-600/60"
                 >
                     <img
-                        src="{{ asset('images/hero-designer.jpg') }}"
+                        src="{{ $settings->heroImageUrl() }}"
                         alt="{{ __('site.hero_designer_alt') }}"
                         class="h-full w-full object-cover object-[center_18%]"
                         width="900"

@@ -17,13 +17,6 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        CustomerReview::query()->delete();
-        DesignTool::query()->delete();
-        Faq::query()->delete();
-        Partner::query()->delete();
-        PortfolioItem::query()->delete();
-        WhyChoosePoint::query()->delete();
-
         User::query()->updateOrCreate(
             ['email' => 'admin@example.com'],
             [
@@ -172,11 +165,14 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($faqs as $i => $row) {
-            Faq::query()->create([
-                ...$row,
-                'sort_order' => $i,
-                'is_published' => true,
-            ]);
+            Faq::query()->updateOrCreate(
+                ['question_en' => $row['question_en']],
+                [
+                    ...$row,
+                    'sort_order' => $i,
+                    'is_published' => true,
+                ]
+            );
         }
 
         $whyChoose = [
@@ -186,15 +182,17 @@ class DatabaseSeeder extends Seeder
             ['title_en' => 'End-to-end campaigns', 'title_my' => 'အဆုံးသတ် ကမ်ပိန်း', 'body_en' => 'From brand assets and calendars to paid support and video production — one team aligned on your growth goals.', 'body_my' => 'ဘရန်း ပစ္စည်းများ၊ ပြက္ခဒိန်၊ paid ပံ့ပိုးမှု နှင့် ဗီဒီယိုအထိ တစ်တပ်တည်းညီ။'],
         ];
         foreach ($whyChoose as $i => $row) {
-            WhyChoosePoint::query()->create([
-                'title_en' => $row['title_en'],
-                'title_my' => $row['title_my'],
-                'body_en' => $row['body_en'],
-                'body_my' => $row['body_my'],
-                'icon' => null,
-                'sort_order' => $i,
-                'is_published' => true,
-            ]);
+            WhyChoosePoint::query()->updateOrCreate(
+                ['title_en' => $row['title_en']],
+                [
+                    'title_my' => $row['title_my'],
+                    'body_en' => $row['body_en'],
+                    'body_my' => $row['body_my'],
+                    'icon' => null,
+                    'sort_order' => $i,
+                    'is_published' => true,
+                ]
+            );
         }
 
         $reviews = [
@@ -205,17 +203,21 @@ class DatabaseSeeder extends Seeder
             ['author_en' => 'Daniel Park', 'author_my' => 'ဒန်နီယယ် ပါ့ခ်', 'role_en' => 'Creative director, Signal Posters', 'role_my' => 'ဒီဇိုင်း ညွှန်ကြားရေးမှူး၊ Signal', 'body_en' => 'Poster series had real personality without losing legibility on large format — rare balance.', 'body_my' => 'ပိုစတာ စီးရီးတွင် ကိုယ်ပိုင်အမူအရာ ရှိပြီး ဖတ်ရလွယ်ပါသည်။', 'rating' => 4],
         ];
         foreach ($reviews as $i => $row) {
-            CustomerReview::query()->create([
-                'author_en' => $row['author_en'],
-                'author_my' => $row['author_my'],
-                'role_en' => $row['role_en'],
-                'role_my' => $row['role_my'],
-                'body_en' => $row['body_en'],
-                'body_my' => $row['body_my'],
-                'rating' => $row['rating'],
-                'sort_order' => $i,
-                'is_published' => true,
-            ]);
+            CustomerReview::query()->updateOrCreate(
+                [
+                    'author_en' => $row['author_en'],
+                    'role_en' => $row['role_en'],
+                ],
+                [
+                    'author_my' => $row['author_my'],
+                    'role_my' => $row['role_my'],
+                    'body_en' => $row['body_en'],
+                    'body_my' => $row['body_my'],
+                    'rating' => $row['rating'],
+                    'sort_order' => $i,
+                    'is_published' => true,
+                ]
+            );
         }
 
         $partners = [
@@ -228,14 +230,16 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($partners as $i => $row) {
-            Partner::query()->create([
-                'name_en' => $row['name_en'],
-                'name_my' => $row['name_my'],
-                'logo_path' => 'demo-partners/'.$i.'.jpg',
-                'website_url' => $row['url'],
-                'sort_order' => $i,
-                'is_published' => true,
-            ]);
+            Partner::query()->updateOrCreate(
+                ['name_en' => $row['name_en']],
+                [
+                    'name_my' => $row['name_my'],
+                    'logo_path' => 'demo-partners/'.$i.'.jpg',
+                    'website_url' => $row['url'],
+                    'sort_order' => $i,
+                    'is_published' => true,
+                ]
+            );
         }
 
         $devIcon = 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons';
@@ -249,16 +253,18 @@ class DatabaseSeeder extends Seeder
         ];
 
         foreach ($stack as $i => $row) {
-            DesignTool::query()->create([
-                'name_en' => $row['name_en'],
-                'name_my' => $row['name_my'],
-                'category_en' => $row['category_en'],
-                'category_my' => $row['category_my'],
-                'logo_path' => $row['logo'],
-                'website_url' => $row['url'],
-                'sort_order' => $i,
-                'is_published' => true,
-            ]);
+            DesignTool::query()->updateOrCreate(
+                ['name_en' => $row['name_en']],
+                [
+                    'name_my' => $row['name_my'],
+                    'category_en' => $row['category_en'],
+                    'category_my' => $row['category_my'],
+                    'logo_path' => $row['logo'],
+                    'website_url' => $row['url'],
+                    'sort_order' => $i,
+                    'is_published' => true,
+                ]
+            );
         }
     }
 }

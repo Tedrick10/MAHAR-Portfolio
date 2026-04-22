@@ -103,6 +103,11 @@ class WebsiteSetting extends Model
         return self::publicMediaUrl($this->favicon_path);
     }
 
+    public function heroImageUrl(): string
+    {
+        return self::publicMediaUrl($this->hero_image_path) ?? asset('images/hero-designer.jpg');
+    }
+
     /**
      * Relative path on the `public` disk for the CV served at /cv (by locale).
      */

@@ -115,6 +115,18 @@ class WebsiteSettingForm
                             ->label('Subtitle (MY)')
                             ->rows(5),
                     ]),
+                Section::make('Hero image')
+                    ->schema([
+                        FileUpload::make('hero_image_path')
+                            ->label('Hero image')
+                            ->image()
+                            ->maxSize(4096)
+                            ->disk('public')
+                            ->directory('hero')
+                            ->imageEditor()
+                            ->visibility('public')
+                            ->helperText('Recommended portrait ratio around 4:5. If empty, the default hero image is used.'),
+                    ]),
                 Section::make('Primary call to action')
                     ->columns(2)
                     ->schema([

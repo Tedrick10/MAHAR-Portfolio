@@ -2,21 +2,21 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-#[Fillable([
-    'name',
-    'email',
-    'phone',
-    'message',
-    'ip_address',
-    'read_at',
-])]
 class ContactMessage extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'name',
+        'email',
+        'phone',
+        'message',
+        'ip_address',
+        'read_at',
+    ];
 
     protected function casts(): array
     {
