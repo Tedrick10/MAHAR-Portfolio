@@ -67,23 +67,38 @@
                 class="animate-fade-up relative mx-auto w-full max-w-md lg:mx-0 lg:max-w-none lg:justify-self-end"
                 style="animation-delay: 160ms"
             >
+                @php
+                    $heroImages = method_exists($settings, 'heroImageUrls')
+                        ? $settings->heroImageUrls(4)
+                        : [$settings->heroImageUrl()];
+                    if ($heroImages === []) {
+                        $heroImages = [asset('images/hero-designer.jpg')];
+                    }
+                @endphp
                 <div
                     class="pointer-events-none absolute -inset-3 -z-10 rounded-[2rem] bg-gradient-to-br from-orange-400/25 via-red-400/15 to-transparent blur-2xl dark:from-orange-500/20 dark:via-red-500/10"
                     aria-hidden="true"
                 ></div>
-                <figure
-                    class="relative aspect-[4/5] overflow-hidden rounded-3xl bg-zinc-100 shadow-2xl shadow-zinc-900/10 ring-1 ring-zinc-200/80 dark:bg-zinc-800 dark:shadow-black/40 dark:ring-zinc-600/60"
-                >
-                    <img
-                        src="{{ $settings->heroImageUrl() }}"
-                        alt="{{ __('site.hero_designer_alt') }}"
-                        class="h-full w-full object-cover object-[center_18%]"
-                        width="900"
-                        height="1125"
-                        fetchpriority="high"
-                        decoding="async"
-                    >
-                </figure>
+                <div class="mx-auto w-full max-w-[560px]">
+                    <div class="grid grid-cols-2 gap-3 lg:gap-4" style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0.75rem;">
+                    @foreach ($heroImages as $heroIndex => $heroImage)
+                        <figure
+                            class="relative m-0 aspect-square min-w-0 overflow-hidden rounded-2xl bg-zinc-100 shadow-xl shadow-zinc-900/10 ring-1 ring-zinc-200/80 dark:bg-zinc-800 dark:shadow-black/40 dark:ring-zinc-600/60"
+                            style="position:relative;margin:0;aspect-ratio:1 / 1;overflow:hidden;"
+                        >
+                            <img
+                                src="{{ $heroImage }}"
+                                alt="{{ __('site.hero_designer_alt') }}"
+                                class="h-full w-full object-cover object-center transition duration-300"
+                                width="560"
+                                height="560"
+                                @if ($heroIndex === 0) fetchpriority="high" @endif
+                                decoding="async"
+                            >
+                        </figure>
+                    @endforeach
+                    </div>
+                </div>
             </div>
         </div>
     </section>

@@ -43,9 +43,9 @@
         </p>
         <h2
             id="marketing-services-title"
-            class="services-font-display mt-3 text-center text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-white"
+            class="font-display mt-3 text-center text-3xl font-semibold leading-[1.2] tracking-normal text-zinc-900 sm:text-4xl dark:text-white"
         >
-            {{ __('site.services_heading') }}
+            {{ \Illuminate\Support\Str::title(__('site.services_heading')) }}
         </h2>
         <p class="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-zinc-600 sm:text-base dark:text-zinc-400">
             {{ __('site.services_intro') }}
@@ -70,7 +70,7 @@
         <div id="facebook-services" class="mt-16 scroll-mt-28">
             <div class="flex flex-col items-center text-center">
                 <p class="text-sm font-medium text-zinc-500 dark:text-zinc-500">{{ __('site.services_facebook_kicker') }}</p>
-                <h3 class="mt-1 font-mono text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
+                <h3 class="mt-1 text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
                     {{ __('site.services_facebook_title') }}
                 </h3>
             </div>
@@ -92,10 +92,10 @@
                             </p>
                         </div>
                         <ul class="mt-6 space-y-2 border-t border-zinc-200/80 pt-5 text-left text-sm text-zinc-600 dark:border-white/10 dark:text-zinc-300">
-                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 font-mono text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
+                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
                                 <span>{{ $t($pkg['option']) }}</span>
                             </li>
-                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 font-mono text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
+                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
                                 <span>{{ $t($pkg['revision']) }}</span>
                             </li>
                             @foreach ($pkg['items'] as $item)
@@ -119,7 +119,7 @@
                     >
                         <div class="border-b border-zinc-200/90 pb-4 text-center dark:border-white/10">
                             <h4 class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t($col['name']) }}</h4>
-                            <p class="mt-2 font-mono text-2xl font-bold text-orange-600 dark:text-orange-400">
+                            <p class="mt-2 text-2xl font-bold text-orange-600 dark:text-orange-400">
                                 {{ $col['price'] }}
                                 <span class="text-sm font-semibold text-zinc-500">{{ $col['currency'] }}</span>
                             </p>
@@ -141,7 +141,7 @@
         <div id="tiktok-services" class="mt-20 scroll-mt-28">
             <div class="flex flex-col items-center text-center">
                 <p class="text-sm font-medium text-zinc-500">{{ __('site.services_tiktok_kicker') }}</p>
-                <h3 class="mt-1 font-mono text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
+                <h3 class="mt-1 text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
                     {{ __('site.services_tiktok_title') }}
                 </h3>
                 <p class="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">{{ __('site.services_tiktok_subtitle') }}</p>
@@ -179,7 +179,7 @@
                                 @endforeach
                             </tr>
                         @endforeach
-                        <tr class="border-b border-orange-200/80 bg-orange-100/90 font-mono text-xs dark:border-white/10 dark:bg-orange-950/20">
+                        <tr class="border-b border-orange-200/80 bg-orange-100/90 text-xs dark:border-white/10 dark:bg-orange-950/20">
                             <td class="px-4 py-3 font-semibold text-orange-800 dark:text-orange-300">
                                 {{ __('site.services_tiktok_row_per_video') }}
                             </td>
@@ -187,7 +187,7 @@
                                 <td class="px-3 py-3 text-center text-orange-900 dark:text-orange-200">{{ $pv }}</td>
                             @endforeach
                         </tr>
-                        <tr class="bg-orange-200/50 font-mono text-sm font-semibold dark:bg-orange-950/30">
+                        <tr class="bg-orange-200/50 text-sm font-semibold dark:bg-orange-950/30">
                             <td class="px-4 py-3 text-orange-950 dark:text-orange-100">{{ __('site.services_tiktok_row_total') }}</td>
                             @foreach ($tt['totals'] as $tot)
                                 <td class="px-3 py-3 text-center text-zinc-900 dark:text-white">{{ $tot }}</td>

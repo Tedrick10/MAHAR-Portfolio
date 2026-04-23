@@ -117,15 +117,20 @@ class WebsiteSettingForm
                     ]),
                 Section::make('Hero image')
                     ->schema([
-                        FileUpload::make('hero_image_path')
-                            ->label('Hero image')
+                        FileUpload::make('hero_image_paths')
+                            ->label('Hero images')
                             ->image()
+                            ->multiple()
+                            ->maxFiles(4)
+                            ->reorderable()
+                            ->panelLayout('grid')
+                            ->imagePreviewHeight('120')
                             ->maxSize(4096)
                             ->disk('public')
                             ->directory('hero')
                             ->imageEditor()
                             ->visibility('public')
-                            ->helperText('Recommended portrait ratio around 4:5. If empty, the default hero image is used.'),
+                            ->helperText('Upload up to 4 images for the hero collage. Recommended portrait ratio around 4:5. If empty, a default image is used.'),
                     ]),
                 Section::make('Primary call to action')
                     ->columns(2)

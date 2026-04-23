@@ -42,6 +42,7 @@ class WebsiteSetting extends Model
     {
         return [
             'marketing_services' => 'array',
+            'hero_image_paths' => 'array',
         ];
     }
 
@@ -105,7 +106,61 @@ class WebsiteSetting extends Model
 
     public function heroImageUrl(): string
     {
+        $legacyPacked = json_decode((string) $this->hero_image_path, true);
+        if (is_array($legacyPacked) && isset($legacyPacked[0]) && is_string($legacyPacked[0])) {
+            return self::publicMediaUrl($legacyPacked[0]) ?? asset('images/hero-designer.jpg');
+        }
+
         return self::publicMediaUrl($this->hero_image_path) ?? asset('images/hero-designer.jpg');
+    }
+
+    /**
+     * @return list<string>
+     */
+    public function heroImageUrls(int $max = 4): array
+    {
+        $urls = [];
+        $paths = $this->hero_image_paths;
+        if (is_string($paths)) {
+            $decoded = json_decode($paths, true);
+            $paths = is_array($decoded) ? $decoded : [];
+        }
+        $paths = is_array($paths) ? $paths : [];
+
+        if ($paths === []) {
+            $legacyPacked = json_decode((string) $this->hero_image_path, true);
+            if (is_array($legacyPacked)) {
+                $paths = $legacyPacked;
+            }
+        }
+
+        foreach ($paths as $path) {
+            if (is_array($path)) {
+                $path = $path['path'] ?? $path['url'] ?? null;
+            }
+
+            if (! is_string($path) || trim($path) === '') {
+                continue;
+            }
+
+            $url = self::publicMediaUrl($path);
+            if ($url !== null) {
+                $urls[] = $url;
+            }
+        }
+
+        if ($urls === [] && filled($this->hero_image_path)) {
+            $single = self::publicMediaUrl($this->hero_image_path);
+            if ($single !== null) {
+                $urls[] = $single;
+            }
+        }
+
+        if ($urls === []) {
+            $urls[] = asset('images/hero-designer.jpg');
+        }
+
+        return array_slice(array_values(array_unique($urls)), 0, $max);
     }
 
     /**

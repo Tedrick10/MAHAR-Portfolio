@@ -5,6 +5,7 @@ namespace App\Filament\Resources\WebsiteSettings\Pages;
 use App\Filament\Resources\WebsiteSettings\WebsiteSettingResource;
 use App\Support\MarketingServicesCellCodec;
 use Filament\Resources\Pages\EditRecord;
+use Illuminate\Support\Facades\Schema;
 
 class EditWebsiteSetting extends EditRecord
 {
@@ -19,6 +20,14 @@ class EditWebsiteSetting extends EditRecord
         }
 
         $data['marketing_services'] = $resolved;
+
+        if (
+            (! isset($data['hero_image_paths']) || ! is_array($data['hero_image_paths']) || $data['hero_image_paths'] === []) &&
+            filled($data['hero_image_path'] ?? null)
+        ) {
+            $legacy = json_decode((string) $data['hero_image_path'], true);
+            $data['hero_image_paths'] = is_array($legacy) ? $legacy : [$data['hero_image_path']];
+        }
 
         return $data;
     }
@@ -38,6 +47,42 @@ class EditWebsiteSetting extends EditRecord
             );
         }
 
+        $heroImages = $this->normalizeHeroPaths($data['hero_image_paths'] ?? null);
+        if (! Schema::hasColumn('website_settings', 'hero_image_paths')) {
+            unset($data['hero_image_paths']);
+            // Backward-compatible storage when the new JSON column is not migrated yet.
+            $data['hero_image_path'] = $heroImages !== [] ? json_encode($heroImages, JSON_UNESCAPED_SLASHES) : null;
+        } else {
+            $data['hero_image_path'] = $heroImages[0] ?? null;
+            $data['hero_image_paths'] = $heroImages;
+        }
+
         return $data;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function normalizeHeroPaths(mixed $raw): array
+    {
+        $paths = [];
+
+        if (is_array($raw)) {
+            foreach ($raw as $item) {
+                if (is_string($item) && trim($item) !== '') {
+                    $paths[] = trim($item);
+                    continue;
+                }
+
+                if (is_array($item)) {
+                    $candidate = $item['path'] ?? $item['url'] ?? null;
+                    if (is_string($candidate) && trim($candidate) !== '') {
+                        $paths[] = trim($candidate);
+                    }
+                }
+            }
+        }
+
+        return array_values(array_slice(array_unique($paths), 0, 4));
     }
 }
