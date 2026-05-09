@@ -18,11 +18,11 @@ class PortfolioItemResource extends Resource
 {
     protected static ?string $model = PortfolioItem::class;
 
-    protected static ?string $navigationLabel = 'Design';
+    protected static ?string $navigationLabel = 'Designs and Media';
 
-    protected static ?string $modelLabel = 'design item';
+    protected static ?string $modelLabel = 'design & media item';
 
-    protected static ?string $pluralModelLabel = 'design items';
+    protected static ?string $pluralModelLabel = 'designs & media';
 
     protected static ?int $navigationSort = 10;
 

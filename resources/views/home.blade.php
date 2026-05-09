@@ -72,7 +72,7 @@
                         ? $settings->heroImageUrls(4)
                         : [$settings->heroImageUrl()];
                     if ($heroImages === []) {
-                        $heroImages = [asset('images/hero-designer.jpg')];
+                        $heroImages = [asset('images/hero-fallback.svg')];
                     }
                 @endphp
                 <div

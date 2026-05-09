@@ -26,6 +26,12 @@ trait ResolvesPublicMediaUrl
             return '/'.$normalized;
         }
 
-        return '/storage/'.$normalized;
+        $onPublicDisk = storage_path('app/public/'.$normalized);
+        if (is_file($onPublicDisk)) {
+            return '/storage/'.$normalized;
+        }
+
+        // Avoid broken <img> URLs when uploads are missing or storage:link was not run on the server.
+        return null;
     }
 }

@@ -1,59 +1,107 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+## UAT testing checklist
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+> **Notes**
+>
+> - Prefer running this checklist on **staging** or a **production clone** before testing. Use the live site (`https://mahar.stringinnovation.com/`) only when necessary.
+> - For every **Fail**, record the time tested, **browser / OS version**, and attach a **screenshot**.
+> - If admin testing may change or delete data, take a **backup** first.
+> - Each line has **Pass** and **Fail** slots. Mark **only one** outcome per row: **Pass** → ✅, **Fail** → ❌ (never both).
 
-## About Laravel
+**Pass / Fail markers**
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Pass:** ✅ **Fail:** ❌
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+| Outcome | How to mark on each checklist line |
+|---------|-------------------------------------|
+| **Pass** — criterion met | `Pass: (✅)` and keep `Fail: ( )` |
+| **Fail** — criterion not met | `Fail: (❌)` and keep `Pass: ( )` |
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Empty slots look like `( )`. After testing, put **✅** inside the Pass parentheses, or **❌** inside the Fail parentheses. If ✅ / ❌ do not show in your viewer, use plain text **`PASS`** or **`FAIL`** in the same place instead.
 
-## Learning Laravel
+**Base URL:** `https://mahar.stringinnovation.com/`
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Use this checklist on the live deployment, **staging**, or a safe clone before release. Prefer a non-production database when exercising admin flows.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Home (`https://mahar.stringinnovation.com/`)
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+- Pass: ( ) | Fail: ( ) — Page loads without errors; no broken layout
+- Pass: ( ) | Fail: ( ) — Hero, services, “why choose”, partners, reviews, and other blocks match content configured in admin
+- Pass: ( ) | Fail: ( ) — Internal links and CTAs resolve to the correct URLs
+- Pass: ( ) | Fail: ( ) — Scroll-to-top and image lightbox (if present) behave correctly
 
-## Agentic Development
+### Locale (`https://mahar.stringinnovation.com/locale/{locale}`)
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+- Pass: ( ) | Fail: ( ) — Switching locale (e.g. EN ↔ MY) updates visible copy site-wide
+- Pass: ( ) | Fail: ( ) — After switching, navigation and deep links still work as expected
+- Pass: ( ) | Fail: ( ) — Locale choice persists across refresh (cookie/session)
 
-```bash
-composer require laravel/boost --dev
+### Portfolio listing (`https://mahar.stringinnovation.com/portfolio`)
 
-php artisan boost:install
-```
+- Pass: ( ) | Fail: ( ) — Listing renders; no visual glitches
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+### Portfolio detail (`https://mahar.stringinnovation.com/portfolio/{slug}`)
 
-## Contributing
+- Pass: ( ) | Fail: ( ) — Correct item for a valid slug
+- Pass: ( ) | Fail: ( ) — Invalid or unknown slug — appropriate 404 (or error) handling
+- Pass: ( ) | Fail: ( ) — Gallery / images display when configured
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### CV download (`https://mahar.stringinnovation.com/cv`)
 
-## Code of Conduct
+- Pass: ( ) | Fail: ( ) — File downloads successfully with expected name/type
+- Pass: ( ) | Fail: ( ) — Missing asset or server error surfaces a sensible message (if applicable)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Contact — form display (`https://mahar.stringinnovation.com/contact`)
 
-## Security Vulnerabilities
+- Pass: ( ) | Fail: ( ) — Form and page copy render correctly
+- Pass: ( ) | Fail: ( ) — Optional Google Maps embed loads when `GOOGLE_MAPS_EMBED_URL` is set
+- Pass: ( ) | Fail: ( ) — Service interest checkboxes appear and match labels (branding, identity, campaign, packaging, digital, other)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Contact — form submit (`https://mahar.stringinnovation.com/contact`)
 
-## License
+- Pass: ( ) | Fail: ( ) — Valid submission redirects back with success flash message
+- Pass: ( ) | Fail: ( ) — Required fields: empty name, email, or message show validation errors
+- Pass: ( ) | Fail: ( ) — Invalid email format rejected
+- Pass: ( ) | Fail: ( ) — Message length within limits (e.g. max length) enforced
+- Pass: ( ) | Fail: ( ) — When services are selected, stored message includes the selected service labels (verify in **Contact messages** in admin)
+- Pass: ( ) | Fail: ( ) — CSRF: request without valid token is rejected
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-# MAHAR-Portfolio
+### FAQ (`https://mahar.stringinnovation.com/faq`)
+
+- Pass: ( ) | Fail: ( ) — Questions/answers match admin data
+- Pass: ( ) | Fail: ( ) — Expand/collapse or accordion behavior works if implemented
+
+### Legal — privacy (`https://mahar.stringinnovation.com/privacy`)
+
+- Pass: ( ) | Fail: ( ) — Privacy content loads
+- Pass: ( ) | Fail: ( ) — Copy is correct under each supported locale
+
+### Legal — terms (`https://mahar.stringinnovation.com/terms`)
+
+- Pass: ( ) | Fail: ( ) — Terms content loads
+- Pass: ( ) | Fail: ( ) — Copy is correct under each supported locale
+
+### Redirects (`https://mahar.stringinnovation.com/partnership`)
+
+- Pass: ( ) | Fail: ( ) — `GET https://mahar.stringinnovation.com/partnership` → `https://mahar.stringinnovation.com/#partnerships` with **301** status
+
+### Theme and responsive UI (`https://mahar.stringinnovation.com/`)
+
+- Pass: ( ) | Fail: ( ) — Dark/light (if applicable) toggles and survives refresh
+- Pass: ( ) | Fail: ( ) — Layout is usable on mobile, tablet, and desktop widths
+
+### Admin panel (`https://mahar.stringinnovation.com/admin`)
+
+- Pass: ( ) | Fail: ( ) — Login: valid credentials succeed; invalid credentials fail clearly
+- Pass: ( ) | Fail: ( ) — Dashboard and sidebar navigation load
+- Pass: ( ) | Fail: ( ) — **Website settings** — save changes; home/branding/logo/favicon reflect updates on the public site
+- Pass: ( ) | Fail: ( ) — **Portfolio items** — create, read, update, delete; slug uniqueness; hero/gallery media
+- Pass: ( ) | Fail: ( ) — **FAQs** — CRUD; order/visibility if used
+- Pass: ( ) | Fail: ( ) — **Contact messages** — list and view submissions from the public form
+- Pass: ( ) | Fail: ( ) — **Design tools**, **Partners**, **Why choose points**, **Customer reviews** — CRUD and visibility on the home page
+- Pass: ( ) | Fail: ( ) — Admin-only features remain inaccessible when logged out
+
+### Cross-cutting (`https://mahar.stringinnovation.com/`)
+
+- Pass: ( ) | Fail: ( ) — Production-like HTTPS: cookies and no mixed-content warnings for assets
+- Pass: ( ) | Fail: ( ) — Basic keyboard navigation and visible focus on main interactive elements
+- Pass: ( ) | Fail: ( ) — Slow network: avoid accidental double-submit on the contact form (UX)

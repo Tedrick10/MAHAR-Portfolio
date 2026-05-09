@@ -15,27 +15,13 @@ class WebsiteSetting extends Model
 
     protected $guarded = [];
 
-    private static ?self $cached = null;
-
+    /**
+     * Load the singleton settings row from the database every time (no once()/static cache).
+     * Cached instances caused stale copy on the public site after Admin saves; a fresh SELECT per call is cheap for one row.
+     */
     public static function current(): self
     {
-        if (self::$cached instanceof self) {
-            return self::$cached;
-        }
-
-        self::$cached = self::query()->first() ?? self::query()->create([]);
-
-        return self::$cached;
-    }
-
-    public static function forgetCached(): void
-    {
-        self::$cached = null;
-    }
-
-    protected static function booted(): void
-    {
-        static::saved(fn () => self::forgetCached());
+        return static::query()->first() ?? static::query()->create([]);
     }
 
     protected function casts(): array
@@ -47,20 +33,64 @@ class WebsiteSetting extends Model
     }
 
     /**
-     * Homepage “Our services” block (Facebook + TikTok). Uses the database JSON when set; otherwise config defaults.
+     * Public “Services & plans” section copy. Column prefix matches lang keys under `site.*` (e.g. services_lab_kicker_en).
+     * When a DB value is empty, falls back to the translation file.
+     */
+    public function servicesCopy(string $prefix): string
+    {
+        // Columns are `{prefix}_en` / `{prefix}_my` — not `{prefix}__en` (suffix must not include a leading underscore).
+        $suffix = str_starts_with((string) app()->getLocale(), 'my') ? 'my' : 'en';
+        $column = $prefix.'_'.$suffix;
+
+        // Use getAttributes(), not $this->attributes[…]: direct array access can miss hydrated values in some setups.
+        $value = $this->getAttributes()[$column] ?? null;
+
+        if (is_string($value) && trim($value) !== '') {
+            return $value;
+        }
+
+        return (string) __("site.{$prefix}");
+    }
+
+    /**
+     * Homepage “Our services” block (Facebook + TikTok). Stored JSON is deep-merged onto config defaults so admin
+     * edits always win while missing keys still fall back to defaults (same behaviour as the Filament form).
      *
      * @return array<string, mixed>
      */
     public function marketingServicesResolved(): array
     {
+        /** @var array<string, mixed> $defaults */
         $defaults = config('marketing_services', []);
         $stored = $this->marketing_services;
 
         if (! is_array($stored) || $stored === []) {
-            return $defaults;
+            $merged = $defaults;
+        } else {
+            $merged = array_replace_recursive($defaults, $stored);
         }
 
-        return $stored;
+        return $this->normalizeMarketingServicesFootnoteShape($merged);
+    }
+
+    /**
+     * Legacy rows sometimes saved `tiktok.footnote` as a plain string; the view expects bilingual `{ en, my }`.
+     *
+     * @param  array<string, mixed>  $merged
+     * @return array<string, mixed>
+     */
+    private function normalizeMarketingServicesFootnoteShape(array $merged): array
+    {
+        $footnote = $merged['tiktok']['footnote'] ?? null;
+
+        if (is_string($footnote) && $footnote !== '') {
+            $merged['tiktok']['footnote'] = [
+                'en' => $footnote,
+                'my' => $footnote,
+            ];
+        }
+
+        return $merged;
     }
 
     /**
@@ -108,10 +138,10 @@ class WebsiteSetting extends Model
     {
         $legacyPacked = json_decode((string) $this->hero_image_path, true);
         if (is_array($legacyPacked) && isset($legacyPacked[0]) && is_string($legacyPacked[0])) {
-            return self::publicMediaUrl($legacyPacked[0]) ?? asset('images/hero-designer.jpg');
+            return self::publicMediaUrl($legacyPacked[0]) ?? asset('images/hero-fallback.svg');
         }
 
-        return self::publicMediaUrl($this->hero_image_path) ?? asset('images/hero-designer.jpg');
+        return self::publicMediaUrl($this->hero_image_path) ?? asset('images/hero-fallback.svg');
     }
 
     /**
@@ -156,11 +186,19 @@ class WebsiteSetting extends Model
             }
         }
 
+        $fallback = asset('images/hero-fallback.svg');
+
         if ($urls === []) {
-            $urls[] = asset('images/hero-designer.jpg');
+            $urls[] = $fallback;
         }
 
-        return array_slice(array_values(array_unique($urls)), 0, $max);
+        // Keep the 2×2 hero grid filled when only some uploads exist on disk or paths are stale.
+        $targetCount = min($max, 4);
+        while (count($urls) < $targetCount) {
+            $urls[] = $fallback;
+        }
+
+        return array_slice(array_values($urls), 0, $max);
     }
 
     /**

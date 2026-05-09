@@ -28,7 +28,7 @@ class PortfolioController extends Controller
 
         return view('portfolio.show', [
             'item' => $item,
-            'galleryUrls' => $item->detailGalleryUrls(),
+            'detailMedia' => $item->resolvedDetailMedia(),
         ]);
     }
 }

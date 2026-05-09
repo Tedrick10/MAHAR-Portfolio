@@ -27,7 +27,7 @@ class PortfolioItemsTable
                     ->label('Cover')
                     ->disk('public')
                     ->height(48),
-                TextColumn::make('gallery_paths')
+                TextColumn::make('detail_media')
                     ->label('Gallery')
                     ->formatStateUsing(fn (?array $state): string => $state ? (string) count(array_filter($state)) : '0')
                     ->alignCenter(),

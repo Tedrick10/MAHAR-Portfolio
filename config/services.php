@@ -4,6 +4,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | YouTube Data API v3 (optional)
+    |--------------------------------------------------------------------------
+    |
+    | Used to block saving portfolio links whose videos cannot be embedded on
+    | other websites. Create a key in Google Cloud Console → APIs → YouTube Data API v3.
+    |
+    */
+
+    'youtube' => [
+        'api_key' => env('YOUTUBE_API_KEY'),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Third Party Services
     |--------------------------------------------------------------------------
     |

@@ -17,6 +17,11 @@ final class WebsiteSettingFormServicesTab
         return Tab::make('Our services')
             ->icon(Heroicon::OutlinedBuildingStorefront)
             ->schema([
+                Section::make('Headlines & body copy')
+                    ->description('Shown on the homepage “Services & plans” block. When left empty, text falls back to lang/en/site.php (and lang/my/site.php). Site title “MAHAR…” is still edited under the Brand tab.')
+                    ->columnSpanFull()
+                    ->schema([self::servicesCopyFields()])
+                    ->collapsible(),
                 Section::make('Facebook — Branding packages')
                     ->description('Three cards on the homepage services section. Each package has tier, option/revision lines, and bullet features (EN + MY).')
                     ->columnSpanFull()
@@ -52,6 +57,86 @@ final class WebsiteSettingFormServicesTab
                                 ->rows(2),
                         ]),
                     ]),
+            ]);
+    }
+
+    private static function servicesCopyFields(): Grid
+    {
+        return Grid::make(2)
+            ->schema([
+                TextInput::make('services_lab_kicker_en')
+                    ->label('Top kicker (EN)')
+                    ->helperText('Small orange line above the main heading.'),
+                TextInput::make('services_lab_kicker_my')
+                    ->label('Top kicker (MY)'),
+                TextInput::make('services_heading_en')
+                    ->label('Main heading (EN)')
+                    ->columnSpanFull(),
+                TextInput::make('services_heading_my')
+                    ->label('Main heading (MY)')
+                    ->columnSpanFull(),
+                Textarea::make('services_intro_en')
+                    ->label('Intro paragraph (EN)')
+                    ->rows(3),
+                Textarea::make('services_intro_my')
+                    ->label('Intro paragraph (MY)')
+                    ->rows(3),
+                TextInput::make('services_cta_contact_en')
+                    ->label('“Get started” button (EN)'),
+                TextInput::make('services_cta_contact_my')
+                    ->label('“Get started” button (MY)'),
+                TextInput::make('services_facebook_kicker_en')
+                    ->label('Facebook block label (EN)')
+                    ->helperText('e.g. (Facebook)'),
+                TextInput::make('services_facebook_kicker_my')
+                    ->label('Facebook block label (MY)'),
+                TextInput::make('services_facebook_title_en')
+                    ->label('Facebook section title (EN)'),
+                TextInput::make('services_facebook_title_my')
+                    ->label('Facebook section title (MY)'),
+                TextInput::make('services_fb_branding_heading_en')
+                    ->label('Branding packages heading (EN)'),
+                TextInput::make('services_fb_branding_heading_my')
+                    ->label('Branding packages heading (MY)'),
+                TextInput::make('services_fb_monthly_heading_en')
+                    ->label('Monthly plans heading (EN)'),
+                TextInput::make('services_fb_monthly_heading_my')
+                    ->label('Monthly plans heading (MY)'),
+                TextInput::make('services_package_script_en')
+                    ->label('“Package” script word on cards (EN)'),
+                TextInput::make('services_package_script_my')
+                    ->label('“Package” script word on cards (MY)'),
+                TextInput::make('services_tiktok_kicker_en')
+                    ->label('TikTok block label (EN)')
+                    ->helperText('e.g. (TikTok)'),
+                TextInput::make('services_tiktok_kicker_my')
+                    ->label('TikTok block label (MY)'),
+                TextInput::make('services_tiktok_title_en')
+                    ->label('TikTok section title (EN)'),
+                TextInput::make('services_tiktok_title_my')
+                    ->label('TikTok section title (MY)'),
+                Textarea::make('services_tiktok_subtitle_en')
+                    ->label('TikTok subtitle (EN)')
+                    ->rows(3),
+                Textarea::make('services_tiktok_subtitle_my')
+                    ->label('TikTok subtitle (MY)')
+                    ->rows(3),
+                TextInput::make('services_tiktok_col_detail_en')
+                    ->label('Table column “Service detail” (EN)'),
+                TextInput::make('services_tiktok_col_detail_my')
+                    ->label('Table column “Service detail” (MY)'),
+                TextInput::make('services_tiktok_row_per_video_en')
+                    ->label('Table row “Per video (MMK)” (EN)'),
+                TextInput::make('services_tiktok_row_per_video_my')
+                    ->label('Table row “Per video (MMK)” (MY)'),
+                TextInput::make('services_tiktok_row_total_en')
+                    ->label('Table row “Total for 10 videos” (EN)'),
+                TextInput::make('services_tiktok_row_total_my')
+                    ->label('Table row “Total for 10 videos” (MY)'),
+                TextInput::make('services_download_pdf_en')
+                    ->label('Download PDF button (EN)'),
+                TextInput::make('services_download_pdf_my')
+                    ->label('Download PDF button (MY)'),
             ]);
     }
 

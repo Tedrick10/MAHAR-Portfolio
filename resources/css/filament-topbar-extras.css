@@ -45,3 +45,55 @@
 .dark .fi-site-brand-title {
     color: rgb(255 255 255);
 }
+
+/* Portfolio videos: grid style with tighter tiles and less empty background */
+.portfolio-video-grid-upload .filepond--drop-label {
+    min-height: 4.5rem;
+}
+
+.portfolio-video-grid-upload .filepond--list-scroller {
+    margin-top: 0.4rem !important;
+}
+
+.portfolio-video-grid-upload .filepond--item {
+    width: min(100%, 11rem) !important;
+    aspect-ratio: 4 / 5;
+    height: auto !important;
+}
+
+/* Show only the video preview tile (no green/red status backgrounds) */
+.portfolio-video-grid-upload .filepond--item-panel {
+    background: transparent !important;
+}
+
+.portfolio-video-grid-upload .filepond--file-wrapper,
+.portfolio-video-grid-upload .filepond--file {
+    background: transparent !important;
+}
+
+.portfolio-video-grid-upload .filepond--file-info,
+.portfolio-video-grid-upload .filepond--file-status {
+    display: none !important;
+}
+
+.portfolio-video-grid-upload .filepond--file-preview-wrapper,
+.portfolio-video-grid-upload .filepond--file-preview {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.portfolio-video-grid-upload .filepond--file-preview video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* Keep Filament FileUpload video previews compact (admin only; images use <img>, not <video>) */
+.fi-fo-file-upload video {
+    max-height: 11rem !important;
+    max-width: min(100%, 28rem) !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain;
+}
+

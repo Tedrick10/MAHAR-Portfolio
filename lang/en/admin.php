@@ -24,8 +24,8 @@ return [
 
     'stat_inbox' => 'Inbox messages',
     'stat_inbox_unread' => ':count unread',
-    'stat_portfolio' => 'Design items',
-    'stat_portfolio_hint' => 'Case studies and detail galleries',
+    'stat_portfolio' => 'Designs & media items',
+    'stat_portfolio_hint' => 'Case studies, galleries, and video',
     'stat_faq' => 'FAQ entries',
     'stat_faq_hint' => 'Questions on the FAQ page',
     'stat_reviews' => 'Customer reviews',
@@ -54,4 +54,6 @@ return [
     'shortcut_partners_hint' => 'Update logos and partner names.',
     'shortcut_design_hint' => 'Manage tools and external links.',
     'shortcut_settings_hint' => 'Site name, social links, and defaults.',
+
+    'portfolio_youtube_not_embeddable' => 'This video is not embeddable on external websites (YouTube blocking). Choose another link where embedding is allowed, or use “Video upload” for an MP4 that plays directly on your site.',
 ];

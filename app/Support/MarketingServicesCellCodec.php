@@ -81,7 +81,11 @@ final class MarketingServicesCellCodec
                 continue;
             }
             foreach ($cells as $j => $cell) {
-                $rows[$i]['cells'][$j] = self::fromFormValue(is_string($cell) ? $cell : '');
+                $flat = is_string($cell)
+                    ? $cell
+                    : self::toFormValue($cell);
+
+                $rows[$i]['cells'][$j] = self::fromFormValue($flat);
             }
         }
 

@@ -3,11 +3,14 @@
 namespace App\Filament\Resources\PortfolioItems\Schemas;
 
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class PortfolioItemForm
 {
@@ -39,7 +42,7 @@ class PortfolioItemForm
                     ]),
                 Section::make('Media')
                     ->columnSpanFull()
-                    ->description('Cover is used on listings and cards. Gallery images appear on the public detail page (lightbox). Leave gallery empty to keep demo placeholder images until you upload your own.')
+                    ->description('Cover is used on listings and cards. Add images, paste a YouTube URL, or upload an MP4/WebM for the public detail gallery. Drag rows to reorder. If you set YOUTUBE_API_KEY in .env, the panel will block YouTube links that cannot be embedded (common for major-label music). For those, use “Video upload” instead — that always plays on the site.')
                     ->schema([
                         FileUpload::make('image_path')
                             ->label('Cover image')
@@ -49,20 +52,64 @@ class PortfolioItemForm
                             ->imageEditor()
                             ->visibility('public')
                             ->columnSpanFull(),
-                        FileUpload::make('gallery_paths')
-                            ->label('Detail gallery images')
-                            ->multiple()
+                        Repeater::make('detail_media')
+                            ->label('Detail gallery')
+                            ->addActionLabel('Add image, video, or YouTube')
                             ->reorderable()
-                            ->appendFiles()
-                            ->image()
-                            ->disk('public')
-                            ->directory('portfolio/gallery')
-                            ->imageEditor()
-                            ->visibility('public')
-                            ->maxFiles(24)
-                            ->panelLayout('grid')
-                            ->imagePreviewHeight('140')
-                            ->helperText('Up to 24 images in a horizontal grid (wraps on smaller screens). Drag tiles to reorder. Shown on the design detail page.'),
+                            ->collapsible()
+                            ->itemLabel(function (?array $state): ?string {
+                                if (! is_array($state)) {
+                                    return null;
+                                }
+
+                                return match ($state['type'] ?? 'image') {
+                                    'youtube' => 'YouTube: '.Str::limit((string) ($state['youtube_url'] ?? ''), 42),
+                                    'video' => 'Uploaded video',
+                                    default => 'Image',
+                                };
+                            })
+                            ->schema([
+                                Select::make('type')
+                                    ->label('Type')
+                                    ->options([
+                                        'image' => 'Image upload',
+                                        'youtube' => 'YouTube link',
+                                        'video' => 'Video upload (MP4 / WebM)',
+                                    ])
+                                    ->default('image')
+                                    ->required()
+                                    ->live(),
+                                FileUpload::make('gallery_image')
+                                    ->label('Image file')
+                                    ->visible(fn ($get) => ($get('type') ?? 'image') === 'image')
+                                    ->image()
+                                    ->disk('public')
+                                    ->directory('portfolio/gallery')
+                                    ->imageEditor()
+                                    ->visibility('public'),
+                                TextInput::make('youtube_url')
+                                    ->label('YouTube URL')
+                                    ->visible(fn ($get) => ($get('type')) === 'youtube')
+                                    ->placeholder('https://www.youtube.com/watch?v=…')
+                                    ->url(),
+                                FileUpload::make('video_path')
+                                    ->label('Video files')
+                                    ->visible(fn ($get) => ($get('type')) === 'video')
+                                    ->required(fn ($get) => ($get('type')) === 'video')
+                                    ->multiple()
+                                    ->reorderable()
+                                    ->appendFiles()
+                                    ->disk('public')
+                                    ->directory('portfolio/videos')
+                                    ->visibility('public')
+                                    ->acceptedFileTypes(['video/*'])
+                                    ->maxParallelUploads(1)
+                                    ->panelLayout('grid')
+                                    ->imagePreviewHeight('140')
+                                    ->itemPanelAspectRatio('4:5')
+                                    ->extraAttributes(['class' => 'portfolio-video-grid-upload']),
+                            ])
+                            ->columnSpanFull(),
                     ]),
                 Section::make('Publishing')
                     ->columnSpanFull()

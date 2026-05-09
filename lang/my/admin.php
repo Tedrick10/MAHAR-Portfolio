@@ -24,8 +24,8 @@ return [
 
     'stat_inbox' => 'Inbox စာများ',
     'stat_inbox_unread' => 'မဖတ်ရသေး :count စောင်',
-    'stat_portfolio' => 'ဒီဇိုင်း အချက်များ',
-    'stat_portfolio_hint' => 'Case study နှင့် ပုံ gallery များ',
+    'stat_portfolio' => 'ဒီဇိုင်းနှင့် မီဒီယာ အချက်များ',
+    'stat_portfolio_hint' => 'Case study၊ ပုံနှင့် ဗီဒီယို',
     'stat_faq' => 'FAQ အချက်',
     'stat_faq_hint' => 'FAQ စာမျက်နှာရှိ မေးခွန်းများ',
     'stat_reviews' => 'ဖောက်သည်သုံးသပ်ချက်များ',
@@ -54,4 +54,6 @@ return [
     'shortcut_partners_hint' => 'လိုဂိုနှင့် အမည်များ ပြင်ဆင်ပါ။',
     'shortcut_design_hint' => 'ကိရိယာများနှင့် ပြင်ပလင့်များ စီမံပါ။',
     'shortcut_settings_hint' => 'အက်ပ် အမည်၊ လူမှုလင့်နှင့် မူလတန်ဖိုးများ။',
+
+    'portfolio_youtube_not_embeddable' => 'ဤဗီဒီယိုကို အခြား ဝက်ဘ်ဆိုက်များတွင် တိုက်ရိုက် ဖွင့်ခွင့်မရှိပါ (YouTube ဖက်မှ ပိတ်ထားပါသည်။) တခြား embed ခွင့်ပေးသော လင့်သုံးပါ၊ သို့မဟုတ် သေချာစေချင်ပါက MP4 အား “Video upload” ဖြင့် တင်ပါ။',
 ];

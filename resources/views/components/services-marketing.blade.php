@@ -16,6 +16,9 @@
     $m = is_array($marketingServices) ? $marketingServices : config('marketing_services');
     $fb = $m['facebook'];
     $tt = $m['tiktok'];
+
+    $siteSettings = \App\Models\WebsiteSetting::current();
+    $svc = fn (string $prefix): string => $siteSettings->servicesCopy($prefix);
 @endphp
 
 <section
@@ -39,16 +42,16 @@
 
     <div class="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
         <p class="text-center text-xs font-bold uppercase tracking-[0.35em] text-orange-600 dark:text-orange-400">
-            {{ __('site.services_lab_kicker') }}
+            {{ $svc('services_lab_kicker') }}
         </p>
         <h2
             id="marketing-services-title"
             class="font-display mt-3 text-center text-3xl font-semibold leading-[1.2] tracking-normal text-zinc-900 sm:text-4xl dark:text-white"
         >
-            {{ \Illuminate\Support\Str::title(__('site.services_heading')) }}
+            {{ $svc('services_heading') }}
         </h2>
         <p class="mx-auto mt-3 max-w-2xl text-center text-sm leading-relaxed text-zinc-600 sm:text-base dark:text-zinc-400">
-            {{ __('site.services_intro') }}
+            {{ $svc('services_intro') }}
         </p>
 
         <div class="mt-10 flex flex-wrap items-center justify-center gap-2">
@@ -63,22 +66,22 @@
             <a
                 href="{{ route('contact') }}"
                 class="rounded-full bg-gradient-to-r from-orange-500 to-red-600 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white shadow-lg shadow-orange-300/40 transition hover:brightness-110 dark:shadow-orange-900/40"
-            >{{ __('site.services_cta_contact') }}</a>
+            >{{ $svc('services_cta_contact') }}</a>
         </div>
 
         {{-- Facebook --}}
         <div id="facebook-services" class="mt-16 scroll-mt-28">
             <div class="flex flex-col items-center text-center">
-                <p class="text-sm font-medium text-zinc-500 dark:text-zinc-500">{{ __('site.services_facebook_kicker') }}</p>
+                <p class="text-sm font-medium text-zinc-500 dark:text-zinc-500">{{ $svc('services_facebook_kicker') }}</p>
                 <h3 class="mt-1 text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
-                    {{ __('site.services_facebook_title') }}
+                    {{ $svc('services_facebook_title') }}
                 </h3>
             </div>
 
-            <p class="mx-auto mt-10 max-w-xl text-center text-xs font-bold uppercase tracking-[0.25em] text-orange-600 dark:text-orange-400">
-                {{ __('site.services_fb_branding_heading') }}
+            <p class="mx-auto mt-5 max-w-xl text-center text-lg font-bold leading-snug tracking-[0.12em] text-orange-600 sm:text-xl lg:text-2xl dark:text-orange-400">
+                {{ $svc('services_fb_branding_heading') }}
             </p>
-            <div class="mt-6 grid gap-6 lg:grid-cols-3">
+            <div class="mt-4 grid gap-6 lg:grid-cols-3">
                 @foreach ($fb['branding'] as $pkg)
                     <div
                         class="flex flex-col rounded-2xl border border-zinc-200/90 bg-white/90 p-6 shadow-lg shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-xl dark:shadow-black/40 dark:backdrop-blur-md"
@@ -88,7 +91,7 @@
                                 {{ $t($pkg['tier']) }}
                             </p>
                             <p class="services-font-script -mt-1 text-2xl text-orange-600 sm:text-[1.65rem] dark:text-orange-400">
-                                {{ __('site.services_package_script') }}
+                                {{ $svc('services_package_script') }}
                             </p>
                         </div>
                         <ul class="mt-6 space-y-2 border-t border-zinc-200/80 pt-5 text-left text-sm text-zinc-600 dark:border-white/10 dark:text-zinc-300">
@@ -109,10 +112,10 @@
                 @endforeach
             </div>
 
-            <p class="mx-auto mt-14 max-w-xl text-center text-xs font-bold uppercase tracking-[0.25em] text-orange-600 dark:text-orange-400">
-                {{ __('site.services_fb_monthly_heading') }}
+            <p class="mx-auto mt-8 max-w-xl text-center text-lg font-bold leading-snug tracking-[0.12em] text-orange-600 sm:text-xl lg:text-2xl dark:text-orange-400">
+                {{ $svc('services_fb_monthly_heading') }}
             </p>
-            <div class="mt-6 grid gap-6 lg:grid-cols-3">
+            <div class="mt-4 grid gap-6 lg:grid-cols-3">
                 @foreach ($fb['monthly'] as $col)
                     <div
                         class="flex flex-col rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-md shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-black/30 dark:shadow-none"
@@ -140,22 +143,22 @@
         {{-- TikTok --}}
         <div id="tiktok-services" class="mt-20 scroll-mt-28">
             <div class="flex flex-col items-center text-center">
-                <p class="text-sm font-medium text-zinc-500">{{ __('site.services_tiktok_kicker') }}</p>
+                <p class="text-sm font-medium text-zinc-500">{{ $svc('services_tiktok_kicker') }}</p>
                 <h3 class="mt-1 text-xl font-semibold tracking-wide text-zinc-900 sm:text-2xl dark:text-white">
-                    {{ __('site.services_tiktok_title') }}
+                    {{ $svc('services_tiktok_title') }}
                 </h3>
-                <p class="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">{{ __('site.services_tiktok_subtitle') }}</p>
+                <p class="mt-2 max-w-2xl text-sm text-zinc-600 dark:text-zinc-400">{{ $svc('services_tiktok_subtitle') }}</p>
             </div>
 
             <div class="mt-8 overflow-x-auto rounded-2xl border border-zinc-200/90 bg-white/95 shadow-xl shadow-zinc-900/10 dark:border-white/10 dark:bg-zinc-950/50 dark:shadow-2xl dark:shadow-black/50">
                 <table class="w-full min-w-[720px] border-collapse text-left text-sm text-zinc-700 dark:text-zinc-300">
                     <caption class="sr-only">
-                        {{ __('site.services_tiktok_title') }}
+                        {{ $svc('services_tiktok_title') }}
                     </caption>
                     <thead>
                         <tr class="border-b border-zinc-200 bg-zinc-100/95 dark:border-white/10 dark:bg-black/40">
                             <th scope="col" class="px-4 py-3 font-semibold text-zinc-500 dark:text-zinc-400">
-                                {{ __('site.services_tiktok_col_detail') }}
+                                {{ $svc('services_tiktok_col_detail') }}
                             </th>
                             @foreach ($tt['plan_labels'] as $plan)
                                 <th scope="col" class="px-3 py-3 text-center font-semibold text-zinc-900 dark:text-white">{{ $t($plan) }}</th>
@@ -181,14 +184,14 @@
                         @endforeach
                         <tr class="border-b border-orange-200/80 bg-orange-100/90 text-xs dark:border-white/10 dark:bg-orange-950/20">
                             <td class="px-4 py-3 font-semibold text-orange-800 dark:text-orange-300">
-                                {{ __('site.services_tiktok_row_per_video') }}
+                                {{ $svc('services_tiktok_row_per_video') }}
                             </td>
                             @foreach ($tt['per_video'] as $pv)
                                 <td class="px-3 py-3 text-center text-orange-900 dark:text-orange-200">{{ $pv }}</td>
                             @endforeach
                         </tr>
                         <tr class="bg-orange-200/50 text-sm font-semibold dark:bg-orange-950/30">
-                            <td class="px-4 py-3 text-orange-950 dark:text-orange-100">{{ __('site.services_tiktok_row_total') }}</td>
+                            <td class="px-4 py-3 text-orange-950 dark:text-orange-100">{{ $svc('services_tiktok_row_total') }}</td>
                             @foreach ($tt['totals'] as $tot)
                                 <td class="px-3 py-3 text-center text-zinc-900 dark:text-white">{{ $tot }}</td>
                             @endforeach
@@ -206,7 +209,7 @@
                     download
                 >
                     <span aria-hidden="true">↓</span>
-                    {{ __('site.services_download_pdf') }}
+                    {{ $svc('services_download_pdf') }}
                 </a>
             </div>
         </div>

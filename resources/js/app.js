@@ -7,7 +7,6 @@ import {
     bindSystemPreferenceChange,
     dispatchThemeChanged,
 } from './theme-sync';
-
 Alpine.plugin(intersect);
 
 document.addEventListener('alpine:init', () => {
