@@ -71,8 +71,9 @@ class WebsiteSetting extends Model
         }
 
         $merged = $this->normalizeMarketingServicesFootnoteShape($merged);
+        $merged = $this->normalizeMarketingServicesBrandingPackages($merged);
 
-        return $this->normalizeMarketingServicesBrandingPackages($merged);
+        return $this->normalizeMarketingServicesMonthlyPackages($merged);
     }
 
     /**
@@ -96,8 +97,8 @@ class WebsiteSetting extends Model
     }
 
     /**
-     * Branding packages used to store option/revision lines; those are replaced by price + currency.
-     * Strips legacy keys and fills missing price/currency from defaults or numeric legacy revision text.
+     * Branding packages: drop legacy `revision`, ensure price/currency and bilingual `option` labels.
+     * Fills missing fields from config defaults; derives legacy price from old revision text if needed.
      *
      * @param  array<string, mixed>  $merged
      * @return array<string, mixed>
@@ -122,9 +123,20 @@ class WebsiteSetting extends Model
             }
 
             /** @var array<string, mixed> $pkg */
-            unset($merged['facebook']['branding'][$i]['option'], $merged['facebook']['branding'][$i]['revision']);
+            unset($merged['facebook']['branding'][$i]['revision']);
 
             $def = isset($defaults[$i]) && is_array($defaults[$i]) ? $defaults[$i] : [];
+
+            $defOpt = is_array($def['option'] ?? null) ? $def['option'] : ['en' => '', 'my' => ''];
+            $opt = is_array($pkg['option'] ?? null) ? $pkg['option'] : [];
+            $merged['facebook']['branding'][$i]['option'] = [
+                'en' => is_string($opt['en'] ?? null) && trim((string) $opt['en']) !== ''
+                    ? (string) $opt['en']
+                    : (string) ($defOpt['en'] ?? ''),
+                'my' => is_string($opt['my'] ?? null) && trim((string) $opt['my']) !== ''
+                    ? (string) $opt['my']
+                    : (string) ($defOpt['my'] ?? ''),
+            ];
 
             $price = $pkg['price'] ?? null;
             if (! is_string($price) || trim($price) === '') {
@@ -148,11 +160,52 @@ class WebsiteSetting extends Model
     }
 
     /**
+     * Monthly (Social Media Marketing) plans: bilingual `option` labels; fill from config when missing.
+     *
+     * @param  array<string, mixed>  $merged
+     * @return array<string, mixed>
+     */
+    private function normalizeMarketingServicesMonthlyPackages(array $merged): array
+    {
+        /** @var array<int, mixed> $defaults */
+        $defaults = config('marketing_services.facebook.monthly', []);
+
+        if (! isset($merged['facebook']) || ! is_array($merged['facebook'])) {
+            return $merged;
+        }
+
+        $monthly = $merged['facebook']['monthly'] ?? null;
+        if (! is_array($monthly)) {
+            return $merged;
+        }
+
+        foreach ($monthly as $i => $plan) {
+            if (! is_array($plan)) {
+                continue;
+            }
+
+            $def = isset($defaults[$i]) && is_array($defaults[$i]) ? $defaults[$i] : [];
+            $defOpt = is_array($def['option'] ?? null) ? $def['option'] : ['en' => '', 'my' => ''];
+            $opt = is_array($plan['option'] ?? null) ? $plan['option'] : [];
+            $merged['facebook']['monthly'][$i]['option'] = [
+                'en' => is_string($opt['en'] ?? null) && trim((string) $opt['en']) !== ''
+                    ? (string) $opt['en']
+                    : (string) ($defOpt['en'] ?? ''),
+                'my' => is_string($opt['my'] ?? null) && trim((string) $opt['my']) !== ''
+                    ? (string) $opt['my']
+                    : (string) ($defOpt['my'] ?? ''),
+            ];
+        }
+
+        return $merged;
+    }
+
+    /**
      * @param  array<string, mixed>  $pkg
      */
     private function marketingServicesLegacyPriceFromRevision(array $pkg): string
     {
-        foreach (['revision', 'option'] as $key) {
+        foreach (['revision'] as $key) {
             if (! isset($pkg[$key])) {
                 continue;
             }

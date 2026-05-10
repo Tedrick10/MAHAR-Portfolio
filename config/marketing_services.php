@@ -9,6 +9,7 @@ return [
         'branding' => [
             [
                 'tier' => $locale('STANDARD', 'စတန်ဒတ်'),
+                'option' => $locale('Option 1', 'ရွေးချယ်မှု ၁'),
                 'price' => '30,000',
                 'currency' => 'MMK',
                 'items' => [
@@ -19,6 +20,7 @@ return [
             ],
             [
                 'tier' => $locale('PREMIUM', 'ပရီမီယံ'),
+                'option' => $locale('Option 2', 'ရွေးချယ်မှု ၂'),
                 'price' => '40,000',
                 'currency' => 'MMK',
                 'items' => [
@@ -33,6 +35,7 @@ return [
             ],
             [
                 'tier' => $locale('GOLD', 'ဂိုလ်'),
+                'option' => $locale('Option 3', 'ရွေးချယ်မှု ၃'),
                 'price' => '50,000',
                 'currency' => 'MMK',
                 'items' => [
@@ -48,6 +51,7 @@ return [
         'monthly' => [
             [
                 'name' => $locale('Basic', 'အခြေခံ'),
+                'option' => $locale('Option 1', 'ရွေးချယ်မှု ၁'),
                 'price' => '400,000',
                 'currency' => 'MMK',
                 'features' => [
@@ -60,6 +64,7 @@ return [
             ],
             [
                 'name' => $locale('Silver', 'ငွေရောင်'),
+                'option' => $locale('Option 2', 'ရွေးချယ်မှု ၂'),
                 'price' => '800,000',
                 'currency' => 'Ks',
                 'features' => [
@@ -75,6 +80,7 @@ return [
             ],
             [
                 'name' => $locale('Gold', 'ရွှေရောင်'),
+                'option' => $locale('Option 3', 'ရွေးချယ်မှု ၃'),
                 'price' => '1,200,000',
                 'currency' => 'MMK',
                 'features' => [

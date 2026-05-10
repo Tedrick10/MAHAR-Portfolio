@@ -87,8 +87,20 @@
                         class="flex h-full flex-col rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-md shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-black/30 dark:shadow-none"
                     >
                         <div class="border-b border-zinc-200/90 pb-4 text-center dark:border-white/10">
-                            <h4 class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t($pkg['tier']) }}</h4>
-                            <p class="mt-2 text-2xl font-bold text-orange-600 dark:text-orange-400">
+                            @php
+                                $optionLabel = trim($t($pkg['option'] ?? ['en' => '', 'my' => '']));
+                            @endphp
+                            <h4 class="text-lg font-semibold leading-snug text-zinc-900 dark:text-white">{{ $t($pkg['tier']) }}</h4>
+                            @if ($optionLabel !== '')
+                                <p class="mt-1.5 text-[13px] font-normal leading-snug text-zinc-500 dark:text-zinc-400">
+                                    {{ $optionLabel }}
+                                </p>
+                            @endif
+                            <p @class([
+                                'text-2xl font-bold text-orange-600 dark:text-orange-400',
+                                'mt-3' => $optionLabel !== '',
+                                'mt-2' => $optionLabel === '',
+                            ])>
                                 {{ $pkg['price'] ?? '—' }}
                                 @if (filled($pkg['currency'] ?? null))
                                     <span class="text-sm font-semibold text-zinc-500">{{ $pkg['currency'] }}</span>
@@ -110,14 +122,26 @@
             <p class="mx-auto mt-8 max-w-xl text-center text-lg font-bold leading-snug tracking-[0.12em] text-orange-600 sm:text-xl lg:text-2xl dark:text-orange-400">
                 {{ $svc('services_fb_monthly_heading') }}
             </p>
-            <div class="mt-4 grid gap-6 lg:grid-cols-3">
+            <div class="mt-4 grid gap-6 lg:grid-cols-3 lg:items-stretch">
                 @foreach ($fb['monthly'] as $col)
                     <div
-                        class="flex flex-col rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-md shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-black/30 dark:shadow-none"
+                        class="flex h-full flex-col rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-md shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-black/30 dark:shadow-none"
                     >
                         <div class="border-b border-zinc-200/90 pb-4 text-center dark:border-white/10">
-                            <h4 class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t($col['name']) }}</h4>
-                            <p class="mt-2 text-2xl font-bold text-orange-600 dark:text-orange-400">
+                            @php
+                                $monthlyOptionLabel = trim($t($col['option'] ?? ['en' => '', 'my' => '']));
+                            @endphp
+                            <h4 class="text-lg font-semibold leading-snug text-zinc-900 dark:text-white">{{ $t($col['name']) }}</h4>
+                            @if ($monthlyOptionLabel !== '')
+                                <p class="mt-1.5 text-[13px] font-normal leading-snug text-zinc-500 dark:text-zinc-400">
+                                    {{ $monthlyOptionLabel }}
+                                </p>
+                            @endif
+                            <p @class([
+                                'text-2xl font-bold text-orange-600 dark:text-orange-400',
+                                'mt-3' => $monthlyOptionLabel !== '',
+                                'mt-2' => $monthlyOptionLabel === '',
+                            ])>
                                 {{ $col['price'] }}
                                 <span class="text-sm font-semibold text-zinc-500">{{ $col['currency'] }}</span>
                             </p>

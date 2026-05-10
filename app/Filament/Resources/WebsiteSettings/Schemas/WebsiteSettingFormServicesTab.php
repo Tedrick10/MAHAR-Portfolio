@@ -23,12 +23,12 @@ final class WebsiteSettingFormServicesTab
                     ->schema([self::servicesCopyFields()])
                     ->collapsible(),
                 Section::make('Facebook — Branding packages')
-                    ->description('Three cards on the homepage services section. Each package has tier name, price, currency label, and bilingual feature bullets.')
+                    ->description('Each package: tier name, option label (e.g. Option 1), price, currency, and bilingual feature bullets.')
                     ->columnSpanFull()
                     ->schema([self::facebookBrandingRepeater()])
                     ->collapsible(),
                 Section::make('Facebook — Monthly plans')
-                    ->description('Three pricing columns with name, price, currency, and feature bullets.')
+                    ->description('Social Media Marketing cards: plan name, optional option label (e.g. Option 1), price, currency, and bilingual feature bullets.')
                     ->columnSpanFull()
                     ->schema([self::facebookMonthlyRepeater()])
                     ->collapsible(),
@@ -154,6 +154,11 @@ final class WebsiteSettingFormServicesTab
                     TextInput::make('tier.my')->label('Tier (MY)'),
                     TextInput::make('price')->label('Price (display)'),
                     TextInput::make('currency')->label('Currency label'),
+                    TextInput::make('option.en')
+                        ->label('Option label (EN)')
+                        ->placeholder('Option 1')
+                        ->helperText('Shown on the card between tier and price.'),
+                    TextInput::make('option.my')->label('Option label (MY)'),
                 ]),
                 Repeater::make('items')
                     ->label('Feature bullets')
@@ -182,6 +187,11 @@ final class WebsiteSettingFormServicesTab
                     TextInput::make('name.my')->label('Name (MY)'),
                     TextInput::make('price')->label('Price (display)'),
                     TextInput::make('currency')->label('Currency label'),
+                    TextInput::make('option.en')
+                        ->label('Option label (EN)')
+                        ->placeholder('Option 1')
+                        ->helperText('Shown on the card between plan name and price (same as Branding packages).'),
+                    TextInput::make('option.my')->label('Option label (MY)'),
                 ]),
                 Repeater::make('features')
                     ->label('Features')

@@ -109,7 +109,7 @@ class EditWebsiteSetting extends EditRecord
                 if (! is_array($pkg)) {
                     continue;
                 }
-                unset($data['marketing_services']['facebook']['branding'][$idx]['option'], $data['marketing_services']['facebook']['branding'][$idx]['revision']);
+                unset($data['marketing_services']['facebook']['branding'][$idx]['revision']);
             }
         }
 
