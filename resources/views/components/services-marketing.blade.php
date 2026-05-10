@@ -81,29 +81,24 @@
             <p class="mx-auto mt-5 max-w-xl text-center text-lg font-bold leading-snug tracking-[0.12em] text-orange-600 sm:text-xl lg:text-2xl dark:text-orange-400">
                 {{ $svc('services_fb_branding_heading') }}
             </p>
-            <div class="mt-4 grid gap-6 lg:grid-cols-3">
+            <div class="mt-4 grid gap-6 lg:grid-cols-3 lg:items-stretch">
                 @foreach ($fb['branding'] as $pkg)
                     <div
-                        class="flex flex-col rounded-2xl border border-zinc-200/90 bg-white/90 p-6 shadow-lg shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-zinc-900/60 dark:shadow-xl dark:shadow-black/40 dark:backdrop-blur-md"
+                        class="flex h-full flex-col rounded-2xl border border-zinc-200/90 bg-white/95 p-6 shadow-md shadow-zinc-900/5 backdrop-blur-sm dark:border-white/10 dark:bg-black/30 dark:shadow-none"
                     >
-                        <div class="text-center">
-                            <p class="services-font-display text-2xl font-bold tracking-[0.12em] text-zinc-900 sm:text-3xl dark:text-white">
-                                {{ $t($pkg['tier']) }}
-                            </p>
-                            <p class="services-font-script -mt-1 text-2xl text-orange-600 sm:text-[1.65rem] dark:text-orange-400">
-                                {{ $svc('services_package_script') }}
+                        <div class="border-b border-zinc-200/90 pb-4 text-center dark:border-white/10">
+                            <h4 class="text-lg font-semibold text-zinc-900 dark:text-white">{{ $t($pkg['tier']) }}</h4>
+                            <p class="mt-2 text-2xl font-bold text-orange-600 dark:text-orange-400">
+                                {{ $pkg['price'] ?? '—' }}
+                                @if (filled($pkg['currency'] ?? null))
+                                    <span class="text-sm font-semibold text-zinc-500">{{ $pkg['currency'] }}</span>
+                                @endif
                             </p>
                         </div>
-                        <ul class="mt-6 space-y-2 border-t border-zinc-200/80 pt-5 text-left text-sm text-zinc-600 dark:border-white/10 dark:text-zinc-300">
-                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
-                                <span>{{ $t($pkg['option']) }}</span>
-                            </li>
-                            <li class="flex justify-between gap-3 border-b border-zinc-100 py-1.5 text-xs text-zinc-500 dark:border-white/5 dark:text-zinc-400">
-                                <span>{{ $t($pkg['revision']) }}</span>
-                            </li>
+                        <ul class="mt-4 flex flex-1 flex-col gap-2.5 text-sm text-zinc-600 dark:text-zinc-300">
                             @foreach ($pkg['items'] as $item)
-                                <li class="flex gap-2.5">
-                                    <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500 dark:bg-orange-500" aria-hidden="true"></span>
+                                <li class="flex gap-2">
+                                    <span class="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-orange-500 dark:bg-orange-500/90" aria-hidden="true"></span>
                                     <span>{{ $t($item) }}</span>
                                 </li>
                             @endforeach

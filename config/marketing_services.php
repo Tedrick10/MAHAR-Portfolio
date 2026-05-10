@@ -9,8 +9,8 @@ return [
         'branding' => [
             [
                 'tier' => $locale('STANDARD', 'စတန်ဒတ်'),
-                'option' => $locale('Option — 1', 'ရွေးချယ်မှု — ၁'),
-                'revision' => $locale('Revision — 1', 'ပြင်ဆင်မှု — ၁'),
+                'price' => '30,000',
+                'currency' => 'MMK',
                 'items' => [
                     $locale('FB Profile', 'FB Profile'),
                     $locale('Cover Photo', 'Cover Photo'),
@@ -19,8 +19,8 @@ return [
             ],
             [
                 'tier' => $locale('PREMIUM', 'ပရီမီယံ'),
-                'option' => $locale('Option — 2', 'ရွေးချယ်မှု — ၂'),
-                'revision' => $locale('Revision — 2', 'ပြင်ဆင်မှု — ၂'),
+                'price' => '40,000',
+                'currency' => 'MMK',
                 'items' => [
                     $locale('FB Profile', 'FB Profile'),
                     $locale('Cover Photo', 'Cover Photo'),
@@ -33,8 +33,8 @@ return [
             ],
             [
                 'tier' => $locale('GOLD', 'ဂိုလ်'),
-                'option' => $locale('Option — 1', 'ရွေးချယ်မှု — ၁'),
-                'revision' => $locale('Revision — 2', 'ပြင်ဆင်မှု — ၂'),
+                'price' => '50,000',
+                'currency' => 'MMK',
                 'items' => [
                     $locale('FB Profile', 'FB Profile'),
                     $locale('Cover Photo', 'Cover Photo'),

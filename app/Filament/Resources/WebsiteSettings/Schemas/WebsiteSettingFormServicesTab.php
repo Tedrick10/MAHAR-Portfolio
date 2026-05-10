@@ -23,7 +23,7 @@ final class WebsiteSettingFormServicesTab
                     ->schema([self::servicesCopyFields()])
                     ->collapsible(),
                 Section::make('Facebook — Branding packages')
-                    ->description('Three cards on the homepage services section. Each package has tier, option/revision lines, and bullet features (EN + MY).')
+                    ->description('Three cards on the homepage services section. Each package has tier name, price, currency label, and bilingual feature bullets.')
                     ->columnSpanFull()
                     ->schema([self::facebookBrandingRepeater()])
                     ->collapsible(),
@@ -152,10 +152,8 @@ final class WebsiteSettingFormServicesTab
                 Grid::make(2)->schema([
                     TextInput::make('tier.en')->label('Tier (EN)'),
                     TextInput::make('tier.my')->label('Tier (MY)'),
-                    TextInput::make('option.en')->label('Option line (EN)'),
-                    TextInput::make('option.my')->label('Option line (MY)'),
-                    TextInput::make('revision.en')->label('Revision line (EN)'),
-                    TextInput::make('revision.my')->label('Revision line (MY)'),
+                    TextInput::make('price')->label('Price (display)'),
+                    TextInput::make('currency')->label('Currency label'),
                 ]),
                 Repeater::make('items')
                     ->label('Feature bullets')

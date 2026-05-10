@@ -70,7 +70,9 @@ class WebsiteSetting extends Model
             $merged = array_replace_recursive($defaults, $stored);
         }
 
-        return $this->normalizeMarketingServicesFootnoteShape($merged);
+        $merged = $this->normalizeMarketingServicesFootnoteShape($merged);
+
+        return $this->normalizeMarketingServicesBrandingPackages($merged);
     }
 
     /**
@@ -91,6 +93,82 @@ class WebsiteSetting extends Model
         }
 
         return $merged;
+    }
+
+    /**
+     * Branding packages used to store option/revision lines; those are replaced by price + currency.
+     * Strips legacy keys and fills missing price/currency from defaults or numeric legacy revision text.
+     *
+     * @param  array<string, mixed>  $merged
+     * @return array<string, mixed>
+     */
+    private function normalizeMarketingServicesBrandingPackages(array $merged): array
+    {
+        /** @var array<int, mixed> $defaults */
+        $defaults = config('marketing_services.facebook.branding', []);
+
+        if (! isset($merged['facebook']) || ! is_array($merged['facebook'])) {
+            return $merged;
+        }
+
+        $branding = $merged['facebook']['branding'] ?? null;
+        if (! is_array($branding)) {
+            return $merged;
+        }
+
+        foreach ($branding as $i => $pkg) {
+            if (! is_array($pkg)) {
+                continue;
+            }
+
+            /** @var array<string, mixed> $pkg */
+            unset($merged['facebook']['branding'][$i]['option'], $merged['facebook']['branding'][$i]['revision']);
+
+            $def = isset($defaults[$i]) && is_array($defaults[$i]) ? $defaults[$i] : [];
+
+            $price = $pkg['price'] ?? null;
+            if (! is_string($price) || trim($price) === '') {
+                $price = $this->marketingServicesLegacyPriceFromRevision($pkg);
+            }
+            if (! is_string($price) || trim($price) === '') {
+                $price = is_array($def) && isset($def['price']) && is_string($def['price']) ? $def['price'] : '';
+            }
+            $merged['facebook']['branding'][$i]['price'] = $price;
+
+            $currency = $pkg['currency'] ?? null;
+            if (! is_string($currency) || trim($currency) === '') {
+                $currency = is_array($def) && isset($def['currency']) && is_string($def['currency'])
+                    ? $def['currency']
+                    : 'MMK';
+            }
+            $merged['facebook']['branding'][$i]['currency'] = $currency;
+        }
+
+        return $merged;
+    }
+
+    /**
+     * @param  array<string, mixed>  $pkg
+     */
+    private function marketingServicesLegacyPriceFromRevision(array $pkg): string
+    {
+        foreach (['revision', 'option'] as $key) {
+            if (! isset($pkg[$key])) {
+                continue;
+            }
+            $raw = $pkg[$key];
+            if (is_array($raw)) {
+                $raw = (string) ($raw['en'] ?? $raw['my'] ?? '');
+            } else {
+                $raw = (string) $raw;
+            }
+            $digits = preg_replace('/\D+/', '', $raw) ?? '';
+            if ($digits !== '' && strlen($digits) <= 15) {
+                return number_format((int) $digits);
+            }
+        }
+
+        return '';
     }
 
     /**

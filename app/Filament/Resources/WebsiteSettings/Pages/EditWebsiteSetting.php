@@ -101,6 +101,18 @@ class EditWebsiteSetting extends EditRecord
             );
         }
 
+        if (
+            isset($data['marketing_services']['facebook']['branding']) &&
+            is_array($data['marketing_services']['facebook']['branding'])
+        ) {
+            foreach ($data['marketing_services']['facebook']['branding'] as $idx => $pkg) {
+                if (! is_array($pkg)) {
+                    continue;
+                }
+                unset($data['marketing_services']['facebook']['branding'][$idx]['option'], $data['marketing_services']['facebook']['branding'][$idx]['revision']);
+            }
+        }
+
         $heroImages = $this->normalizeHeroPaths($data['hero_image_paths'] ?? null);
         if (! Schema::hasColumn('website_settings', 'hero_image_paths')) {
             unset($data['hero_image_paths']);
