@@ -68,12 +68,73 @@ class WebsiteSetting extends Model
             $merged = $defaults;
         } else {
             $merged = array_replace_recursive($defaults, $stored);
+            // array_replace_recursive keeps extra numeric indices from $defaults when $stored has
+            // fewer repeater rows (e.g. deleted feature bullets). Overlay list-shaped keys from DB.
+            $merged = $this->applyStoredMarketingServiceLists($merged, $stored);
         }
 
         $merged = $this->normalizeMarketingServicesFootnoteShape($merged);
         $merged = $this->normalizeMarketingServicesBrandingPackages($merged);
 
         return $this->normalizeMarketingServicesMonthlyPackages($merged);
+    }
+
+    /**
+     * After array_replace_recursive(), trailing list entries from config defaults can remain when the
+     * admin removed repeater rows. When the DB explicitly saved a shorter list, use that list verbatim.
+     *
+     * @param  array<string, mixed>  $merged
+     * @param  array<string, mixed>  $stored
+     * @return array<string, mixed>
+     */
+    private function applyStoredMarketingServiceLists(array $merged, array $stored): array
+    {
+        $fbStored = $stored['facebook'] ?? null;
+        if (is_array($fbStored)) {
+            $brandingStored = $fbStored['branding'] ?? null;
+            if (is_array($brandingStored)) {
+                foreach ($brandingStored as $i => $pkg) {
+                    if (! is_array($pkg) || ! array_key_exists('items', $pkg) || ! is_array($pkg['items'])) {
+                        continue;
+                    }
+                    if (! isset($merged['facebook']['branding'][$i]) || ! is_array($merged['facebook']['branding'][$i])) {
+                        continue;
+                    }
+                    $merged['facebook']['branding'][$i]['items'] = array_values($pkg['items']);
+                }
+            }
+
+            $monthlyStored = $fbStored['monthly'] ?? null;
+            if (is_array($monthlyStored)) {
+                foreach ($monthlyStored as $i => $plan) {
+                    if (! is_array($plan) || ! array_key_exists('features', $plan) || ! is_array($plan['features'])) {
+                        continue;
+                    }
+                    if (! isset($merged['facebook']['monthly'][$i]) || ! is_array($merged['facebook']['monthly'][$i])) {
+                        continue;
+                    }
+                    $merged['facebook']['monthly'][$i]['features'] = array_values($plan['features']);
+                }
+            }
+        }
+
+        $ttStored = $stored['tiktok'] ?? null;
+        if (is_array($ttStored)) {
+            if (array_key_exists('plan_labels', $ttStored) && is_array($ttStored['plan_labels'])) {
+                $merged['tiktok']['plan_labels'] = array_values($ttStored['plan_labels']);
+            }
+            if (array_key_exists('rows', $ttStored) && is_array($ttStored['rows'])) {
+                $merged['tiktok']['rows'] = array_values($ttStored['rows']);
+            }
+            if (array_key_exists('per_video', $ttStored) && is_array($ttStored['per_video'])) {
+                $merged['tiktok']['per_video'] = array_values($ttStored['per_video']);
+            }
+            if (array_key_exists('totals', $ttStored) && is_array($ttStored['totals'])) {
+                $merged['tiktok']['totals'] = array_values($ttStored['totals']);
+            }
+        }
+
+        return $merged;
     }
 
     /**
