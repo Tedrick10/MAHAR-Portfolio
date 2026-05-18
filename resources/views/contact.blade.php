@@ -124,18 +124,30 @@
 
             {{-- Right: map + contact rows --}}
             <div class="order-1 space-y-6 lg:order-2">
-                <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg shadow-zinc-900/5 ring-1 ring-zinc-900/5 dark:border-white/10 dark:bg-[#0c1628] dark:shadow-xl dark:shadow-black/30 dark:ring-white/5">
-                    <div class="aspect-[4/3] min-h-[220px] w-full sm:aspect-[16/10] sm:min-h-[260px]">
-                        <iframe
-                            class="h-full w-full border-0"
-                            src="{{ $mapsEmbedUrl }}"
-                            title="{{ __('site.contact_map_iframe_title') }}"
-                            loading="lazy"
-                            allowfullscreen
-                            referrerpolicy="no-referrer-when-downgrade"
-                        ></iframe>
+                @if (filled($mapsEmbedUrl))
+                    <div class="overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-lg shadow-zinc-900/5 ring-1 ring-zinc-900/5 dark:border-white/10 dark:bg-[#0c1628] dark:shadow-xl dark:shadow-black/30 dark:ring-white/5">
+                        <div class="aspect-[4/3] min-h-[220px] w-full sm:aspect-[16/10] sm:min-h-[260px]">
+                            <iframe
+                                class="h-full w-full border-0"
+                                src="{{ $mapsEmbedUrl }}"
+                                title="{{ __('site.contact_map_iframe_title') }}"
+                                loading="lazy"
+                                allowfullscreen
+                                referrerpolicy="no-referrer-when-downgrade"
+                            ></iframe>
+                        </div>
                     </div>
-                </div>
+                @elseif (filled($mapsOpenUrl))
+                    <div class="flex aspect-[4/3] min-h-[220px] flex-col items-center justify-center gap-4 rounded-2xl border border-zinc-200 bg-white p-8 text-center shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-[#0c1628] dark:shadow-xl dark:shadow-black/30">
+                        <p class="text-sm text-zinc-600 dark:text-zinc-400">{{ __('site.contact_map_open') }}</p>
+                        <a
+                            href="{{ $mapsOpenUrl }}"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-orange-600 to-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg transition hover:from-orange-500 hover:to-red-500"
+                        >{{ __('site.contact_map_open') }}</a>
+                    </div>
+                @endif
 
                 <div class="rounded-2xl border border-zinc-200 bg-white p-1 shadow-lg shadow-zinc-900/5 dark:border-white/10 dark:bg-[#0c1628]/95 dark:shadow-lg dark:shadow-black/20">
                     <ul class="divide-y divide-zinc-100 dark:divide-white/5">

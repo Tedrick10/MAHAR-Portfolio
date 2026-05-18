@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\WebsiteSettings\Pages;
 
 use App\Filament\Resources\WebsiteSettings\WebsiteSettingResource;
+use App\Support\GoogleMapsUrlNormalizer;
 use App\Support\MarketingServicesCellCodec;
 use Filament\Resources\Pages\EditRecord;
 use Illuminate\Support\Facades\Schema;
@@ -47,6 +48,15 @@ class EditWebsiteSetting extends EditRecord
         ) {
             $legacy = json_decode((string) $data['hero_image_path'], true);
             $data['hero_image_paths'] = is_array($legacy) ? $legacy : [$data['hero_image_path']];
+        }
+
+        if (
+            (! isset($data['contact_google_maps_share_url']) || ! filled($data['contact_google_maps_share_url']))
+            && filled($data['contact_google_maps_embed_url'] ?? null)
+            && is_string($data['contact_google_maps_embed_url'])
+            && ! GoogleMapsUrlNormalizer::isEmbeddableInIframe($data['contact_google_maps_embed_url'])
+        ) {
+            $data['contact_google_maps_share_url'] = $data['contact_google_maps_embed_url'];
         }
 
         return $this->mergeServicesCopyDefaultsForForm($data);
@@ -121,6 +131,23 @@ class EditWebsiteSetting extends EditRecord
         } else {
             $data['hero_image_path'] = $heroImages[0] ?? null;
             $data['hero_image_paths'] = $heroImages;
+        }
+
+        if (array_key_exists('contact_google_maps_share_url', $data)) {
+            $share = is_string($data['contact_google_maps_share_url'])
+                ? trim($data['contact_google_maps_share_url'])
+                : '';
+            $data['contact_google_maps_share_url'] = $share === '' ? null : $share;
+
+            if ($share === '') {
+                $data['contact_google_maps_embed_url'] = null;
+            } else {
+                try {
+                    $data['contact_google_maps_embed_url'] = GoogleMapsUrlNormalizer::normalize($share);
+                } catch (\Throwable) {
+                    $data['contact_google_maps_embed_url'] = null;
+                }
+            }
         }
 
         return $this->dropAttributesWithoutDbColumns($data);

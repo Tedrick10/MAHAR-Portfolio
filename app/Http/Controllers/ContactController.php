@@ -18,7 +18,8 @@ class ContactController extends Controller
 
         return view('contact', [
             'settings' => $settings,
-            'mapsEmbedUrl' => config('site.google_maps_embed_url'),
+            'mapsEmbedUrl' => $settings->contactGoogleMapsEmbedUrl(),
+            'mapsOpenUrl' => $settings->contactGoogleMapsOpenUrl(),
         ]);
     }
 

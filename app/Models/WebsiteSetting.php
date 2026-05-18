@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Concerns\HasLocalizedColumns;
 use App\Models\Concerns\ResolvesPublicMediaUrl;
+use App\Support\GoogleMapsUrlNormalizer;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\HtmlString;
 
 class WebsiteSetting extends Model
@@ -14,6 +16,13 @@ class WebsiteSetting extends Model
     use ResolvesPublicMediaUrl;
 
     protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        static::saved(function (WebsiteSetting $setting): void {
+            Cache::forget('ws_contact_map_embed_'.$setting->id);
+        });
+    }
 
     /**
      * Load the singleton settings row from the database every time (no once()/static cache).
@@ -286,8 +295,77 @@ class WebsiteSetting extends Model
     }
 
     /**
-     * Public site title next to logo, meta titles, admin brand label. Falls back to config('app.name').
+     * Google Maps iframe src for the Contact page (resolved from share link on save).
      */
+    public function contactGoogleMapsEmbedUrl(): ?string
+    {
+        $embed = $this->contact_google_maps_embed_url;
+        if (is_string($embed) && trim($embed) !== '' && GoogleMapsUrlNormalizer::isEmbeddableInIframe(trim($embed))) {
+            return trim($embed);
+        }
+
+        // Re-resolve when DB still has a legacy output=embed URL from an older build.
+        if (is_string($embed) && trim($embed) !== '' && str_contains(trim($embed), 'output=embed')) {
+            $embed = null;
+        }
+
+        $share = $this->contactGoogleMapsShareUrlRaw();
+        if ($share === null) {
+            $fromConfig = config('site.google_maps_embed_url');
+
+            return is_string($fromConfig) && trim($fromConfig) !== '' ? trim($fromConfig) : null;
+        }
+
+        $cacheKey = 'ws_contact_map_embed_'.$this->id;
+        $cached = Cache::get($cacheKey);
+        if (is_string($cached) && $cached !== '') {
+            return $cached;
+        }
+
+        try {
+            $normalized = GoogleMapsUrlNormalizer::normalize($share);
+        } catch (\Throwable) {
+            $normalized = null;
+        }
+
+        if (is_string($normalized) && $normalized !== '') {
+            Cache::put($cacheKey, $normalized, now()->addDays(7));
+
+            return $normalized;
+        }
+
+        return null;
+    }
+
+    /** Share link shown in Admin and used for “Open in Google Maps”. */
+    public function contactGoogleMapsOpenUrl(): ?string
+    {
+        return $this->contactGoogleMapsShareUrlRaw();
+    }
+
+    private function contactGoogleMapsShareUrlRaw(): ?string
+    {
+        $share = $this->contact_google_maps_share_url;
+        if (is_string($share) && trim($share) !== '') {
+            $trimmed = trim($share);
+
+            return str_starts_with($trimmed, 'http') ? $trimmed : 'https://'.$trimmed;
+        }
+
+        $legacy = $this->contact_google_maps_embed_url;
+        if (
+            is_string($legacy)
+            && trim($legacy) !== ''
+            && ! GoogleMapsUrlNormalizer::isEmbeddableInIframe(trim($legacy))
+        ) {
+            $trimmed = trim($legacy);
+
+            return str_starts_with($trimmed, 'http') ? $trimmed : 'https://'.$trimmed;
+        }
+
+        return null;
+    }
+
     public function displayName(): string
     {
         $name = $this->localized('site_name');

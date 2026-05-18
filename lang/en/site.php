@@ -49,7 +49,7 @@ return [
     'contact_map_heading' => 'Map',
     'contact_map_open' => 'Open in Google Maps',
     'contact_map_iframe_title' => 'Map showing studio region',
-    'contact_map_caption' => 'Replace the embed URL in .env for an exact studio pin.',
+    'contact_map_caption' => 'Set a Google Maps share link in Admin → Site settings → Contact.',
     'contact_hours_label' => 'Hours',
     'contact_services_label' => 'I am interested in:',
     'contact_services_prefix' => '[Services] ',

@@ -235,7 +235,6 @@ class WebsiteSettingForm
                             ->columnSpan(1),
                         TextInput::make('contact_phone')
                             ->label('Phone')
-                            ->tel()
                             ->columnSpan(1),
                         Textarea::make('contact_address_en')
                             ->label('Address (EN)')
@@ -247,6 +246,24 @@ class WebsiteSettingForm
                             ->label('Hours (EN)'),
                         TextInput::make('contact_hours_my')
                             ->label('Hours (MY)'),
+                    ]),
+                Section::make('Google Map')
+                    ->description('Paste a Google Maps share link from your phone or browser (Share → Copy link). The map on the Contact page is generated automatically when you save.')
+                    ->schema([
+                        Textarea::make('contact_google_maps_share_url')
+                            ->label('Google Maps share link')
+                            ->rows(2)
+                            ->columnSpanFull()
+                            ->placeholder('https://maps.app.goo.gl/NZgr7J461X1HgN8W8')
+                            ->helperText('Share → Copy link works. If the map shows “Place info couldn’t load”, use Share → Embed a map → copy the iframe src URL instead.')
+                            ->dehydrateStateUsing(function (mixed $state): ?string {
+                                if (! is_string($state)) {
+                                    return null;
+                                }
+                                $trimmed = trim($state);
+
+                                return $trimmed === '' ? null : $trimmed;
+                            }),
                     ]),
             ]);
     }

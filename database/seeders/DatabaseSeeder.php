@@ -10,6 +10,7 @@ use App\Models\PortfolioItem;
 use App\Models\WhyChoosePoint;
 use App\Models\User;
 use App\Models\WebsiteSetting;
+use App\Support\GoogleMapsUrlNormalizer;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -26,7 +27,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        WebsiteSetting::query()->updateOrCreate(
+        $settings = WebsiteSetting::query()->updateOrCreate(
             ['id' => 1],
             [
                 'hero_kicker_en' => 'Digital marketing · Social-first growth',
@@ -55,6 +56,7 @@ class DatabaseSeeder extends Seeder
                 'contact_address_my' => "ရန်ကုန်၊ ဖန်တီးမှုနယ်မြေ\nစတူဒီယို ၄ ဘီ",
                 'contact_hours_en' => 'Mon – Fri: 09:00 – 18:00',
                 'contact_hours_my' => 'တနင်္လာ – သောကြာ: ၀၉၀၀ – ၁၈၀၀',
+                'contact_google_maps_share_url' => 'https://maps.app.goo.gl/NZgr7J461X1HgN8W8',
                 'partnership_heading_en' => 'Partnerships',
                 'partnership_heading_my' => 'ပူးပေါင်းဆောင်ရွက်မှု',
                 'partnership_body_en' => 'Featured partners on the home page carousel. Update logos and links anytime in Admin.',
@@ -73,6 +75,13 @@ class DatabaseSeeder extends Seeder
                 'social_tiktok' => 'https://www.tiktok.com',
             ]
         );
+
+        if (filled($settings->contact_google_maps_share_url)) {
+            $mapEmbed = GoogleMapsUrlNormalizer::normalize((string) $settings->contact_google_maps_share_url);
+            if (filled($mapEmbed)) {
+                $settings->update(['contact_google_maps_embed_url' => $mapEmbed]);
+            }
+        }
 
         $projects = [
             ['slug' => 'aurora-coffee-brand', 'title_en' => 'Aurora Coffee identity', 'title_my' => 'Aurora ကော်ဖီ အမှတ်တံဆိပ်', 'category_en' => 'Branding', 'category_my' => 'ဘရန်း', 'accent_color' => '#7c3aed'],

@@ -49,7 +49,7 @@ return [
     'contact_map_heading' => 'မြေပုံ',
     'contact_map_open' => 'Google Maps မှာ ဖွင့်ရန်',
     'contact_map_iframe_title' => 'စတူဒီယို ဒေသမြေပုံ',
-    'contact_map_caption' => 'နေရာတိပြချင်ရင် Google Maps Embed URL ကို .env ၌ သတ်မှတ်ပါ။',
+    'contact_map_caption' => 'Google Maps share link ကို Admin → Site settings → Contact တွင် ထည့်ပါ။',
     'contact_hours_label' => 'အချိန်ဇယား',
     'contact_services_label' => 'စိတ်ဝင်စားသော ဝန်ဆောင်မှုများ —',
     'contact_services_prefix' => '[ဝန်ဆောင်မှုများ] ',

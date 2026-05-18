@@ -7,8 +7,8 @@ return [
     | Google Maps (contact page)
     |--------------------------------------------------------------------------
     |
-    | Paste the iframe "src" URL from Google Maps → Share → Embed a map.
-    | If unset, a default Yangon-area embed is used for the demo template.
+    | Fallback when Site settings → Contact → Google Maps embed URL is empty.
+    | Prefer editing the map in Admin; use this .env value only for deploy defaults.
     |
     */
 
